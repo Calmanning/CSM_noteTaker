@@ -6,7 +6,7 @@ const writeFileAsync = util.promisify(fs.writeFile);
 
 
 class NoteDB {
-  
+
     getNotes() {
         return this.read().then(notes => {
             let readNotes;
@@ -22,8 +22,7 @@ class NoteDB {
     }
 //will be the saved note
     postNote(calledNote) {
-        // const {title, text} = calledNote;
-        // const savedNote = {title, text, id}
+        
         return this.getNotes().then(notes => [...notes, calledNote])
         .then(noteList => this.write(noteList))
         .then(() => calledNote)
@@ -33,8 +32,8 @@ class NoteDB {
     deleteNote(trashNoteId){
         console.log("and here's the info from the db call: " + trashNoteId)
         return this.getNotes()
-            .then(notes => notes.filter(trashNote => trashNote.id !== parseInt(trashNoteId)))
-            .then(console.log(notes)).then(newNotesList => this.write(newNotesList))
+            .then(allNotes => allNotes.filter(trashNote => trashNote.id !== parseInt(trashNoteId)))
+            .then(console.log(this.getNotes)).then(newNotesList => this.write(newNotesList))
         
     }
 
@@ -49,9 +48,3 @@ class NoteDB {
 }
 
 module.exports = new NoteDB()   
-
-// // fs.res.readFile("db.json", "utf8", (err, data) => {
-//     if (err) throw err
-//     console.log(JSON.parse(data));
-//     res.JSON.paser(data)
-// })

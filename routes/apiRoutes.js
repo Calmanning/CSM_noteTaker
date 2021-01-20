@@ -18,7 +18,7 @@ router.post("/notedb",function(req, res) {
     
 });
 
-
+//getting the notes 
 router.get("/notedb",function(req, res) {
     
     notedb.getNotes()
