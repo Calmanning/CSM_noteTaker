@@ -33,7 +33,7 @@ class NoteDB {
         console.log("and here's the info from the db call: " + trashNoteId)
         return this.getNotes()
             .then(allNotes => allNotes.filter(trashNote => trashNote.id !== parseInt(trashNoteId)))
-            .then(console.log(this.getNotes)).then(newNotesList => this.write(newNotesList))
+            .then(console.log(allNotes)).then(newNotesList => this.write(newNotesList))
         
     }
 
