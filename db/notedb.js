@@ -3,12 +3,10 @@ const fs = require("fs");
 const readFileAsync = util.promisify(fs.readFile);
 const writeFileAsync = util.promisify(fs.writeFile);
 
-class NoteDB {
-    constructor(noteId){ 
-        this.noteId = 0
-        
-    } 
 
+
+class NoteDB {
+  
     getNotes() {
         return this.read().then(notes => {
             let readNotes;
@@ -16,24 +14,28 @@ class NoteDB {
                 readNotes=[].concat(JSON.parse(notes))
             } catch (error) {
                 readNotes = []
-                console.log("something broke in getNotes, genius.")    
+                console.log("something broke in getNotes.")    
             }
                 return readNotes
             
         }) 
     }
-//will be the note itself
+//will be the saved note
     postNote(calledNote) {
-        const {title, text} = calledNote;
-        const savedNote = {title, text, id:++this.noteID}
-        return this.getNotes().then(notes => [...notes, savedNote])
+        // const {title, text} = calledNote;
+        // const savedNote = {title, text, id}
+        return this.getNotes().then(notes => [...notes, calledNote])
         .then(noteList => this.write(noteList))
-        .then(() => savedNote)
+        .then(() => calledNote)
 
     }
-//based on noteId
-    deleteNote(){
 
+    deleteNote(trashNoteId){
+        console.log("and here's the info from the db call: " + trashNoteId)
+        return this.getNotes()
+            .then(notes => notes.filter(trashNote => trashNote.id !== parseInt(trashNoteId)))
+            .then(console.log(notes)).then(newNotesList => this.write(newNotesList))
+        
     }
 
     read() {

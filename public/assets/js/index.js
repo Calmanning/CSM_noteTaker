@@ -1,36 +1,38 @@
-const router = require("express").Router()
-
 const $noteTitle = $(".note-title");
 const $noteText = $(".note-textarea");
 const $saveNoteBtn = $(".save-note");
 const $newNoteBtn = $(".new-note");
 const $noteList = $(".list-container .list-group");
 
+
 // activeNote is used to keep track of the note in the textarea
 let activeNote = {};
+let noteId = 0;
 
 // A function for getting all notes from the db
 const getNotes = () => {
   return $.ajax({
-    url: "/api/notes",
-    method: "GET",
+    url: "/api/notedb",
+    method: "GET"
   });
 };
 
 // A function for saving a note to the db
 const saveNote = (note) => {
+  console.log("is this the problem?")
   return $.ajax({
-    url: "/api/notes",
+    url: "/api/notedb",
     data: note,
-    method: "POST",
+    method: "POST"
   });
 };
 
 // A function for deleting a note from the db
 const deleteNote = (id) => {
+  console.log("the note id: "+id)
   return $.ajax({
-    url: "api/notes/" + id,
-    method: "DELETE",
+    url: "api/notedb/"+id,
+    method: "DELETE"
   });
 };
 
@@ -54,9 +56,11 @@ const renderActiveNote = () => {
 
 // Get the note data from the inputs, save it to the db and update the view
 const handleNoteSave = function () {
+  noteId++
   const newNote = {
     title: $noteTitle.val(),
     text: $noteText.val(),
+    id: noteId
   };
 
   saveNote(newNote).then(() => {
@@ -66,6 +70,7 @@ const handleNoteSave = function () {
 };
 
 // Delete the clicked note
+
 const handleNoteDelete = function (event) {
   // prevents the click listener for the list from being called when the button inside of it is clicked
   event.stopPropagation();
@@ -75,6 +80,9 @@ const handleNoteDelete = function (event) {
   if (activeNote.id === note.id) {
     activeNote = {};
   }
+
+  console.log(note)
+  console.log("the delete note id: " +note.id)
 
   deleteNote(note.id).then(() => {
     getAndRenderNotes();
